@@ -16,7 +16,20 @@ impl Config {
 
         let query = args[1].clone();
         let file_path = args[2].clone();
-        let ignore_case = env::var("IGNORE_CASE").is_ok();
+
+        let ignore_case_env = env::var("IGNORE_CASE").is_ok();
+        let ignore_case: bool;
+
+        if args.len() > 3 {
+            if args[3].to_lowercase() == "ignore_case" {
+                ignore_case = true;
+            } else {
+                ignore_case = ignore_case_env;
+            }
+        } else {
+            ignore_case = ignore_case_env;
+        }
+
         Ok(Config { query, file_path, ignore_case })
     }
 }
@@ -30,9 +43,9 @@ pub fn grep(config: Config) -> Result<String, Box<dyn Error>> {
         search(&config.query, &contents)
     };
 
-    let mut formattedResult = String::from(results.join("\n"));
-    formattedResult.push('\n');
-    Ok(formattedResult)
+    let mut formatted_result = String::from(results.join("\n"));
+    formatted_result.push('\n');
+    Ok(formatted_result)
 }
 
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
