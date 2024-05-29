@@ -10,8 +10,10 @@ fn main() {
         process::exit(1);
     });
 
-    if let Err(e) = minigrep::run(config) {
-        eprintln!("Application error: {e}");
+    let result = minigrep::grep(config).unwrap_or_else(|err| {
+        eprintln!("Application error: {err}");
         process::exit(1);
-    }
+    });
+
+    print!("{result}");
 }

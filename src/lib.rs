@@ -21,7 +21,7 @@ impl Config {
     }
 }
 
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+pub fn grep(config: Config) -> Result<String, Box<dyn Error>> {
     let contents = fs::read_to_string(config.file_path)?;
 
     let results = if config.ignore_case {
@@ -30,10 +30,9 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
         search(&config.query, &contents)
     };
 
-    for line in search(&config.query, &contents) {
-        println!("{line}");
-    }
-    Ok(())
+    let mut formattedResult = String::from(results.join("\n"));
+    formattedResult.push('\n');
+    Ok(formattedResult)
 }
 
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
