@@ -1,6 +1,6 @@
+use std::env;
 use std::error::Error;
 use std::fs;
-use std::env;
 
 pub struct Config {
     pub query: String,
@@ -30,7 +30,15 @@ impl Config {
             ignore_case = ignore_case_env;
         }
 
-        Ok(Config { query, file_path, ignore_case })
+        Ok(Config {
+            query,
+            file_path,
+            ignore_case,
+        })
+    }
+
+    pub fn get_ignore_case(args: &[String]) -> bool {
+        
     }
 }
 
